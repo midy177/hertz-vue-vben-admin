@@ -71,9 +71,9 @@ export function configStyleImportPlugin(_isBuild: boolean) {
 
           return ignoreList.includes(name)
             ? ''
-            : replaceList.hasOwnProperty(name)
-            ? `ant-design-vue/es/${replaceList[name]}/style/index`
-            : `ant-design-vue/es/${name}/style/index`;
+            : Object.prototype.hasOwnProperty.call(replaceList, name)
+              ? `ant-design-vue/es/${replaceList[name]}/style/index`
+              : `ant-design-vue/es/${name}/style/index`;
         },
       },
     ],

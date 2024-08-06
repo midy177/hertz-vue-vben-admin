@@ -4,11 +4,9 @@
 export interface LoginParams {
   username: string;
   password: string;
-  // Helio: 增加"记住我"参数
-  rememberMe: boolean;
-  // Helio: 登录验证码（可选）
-  captchaId?: string;
-  captchaAnswer?: string;
+  // 登录验证码（可选）
+  captcha: string;
+  captchaID: string;
 }
 
 // Helio: 去除 RoleInfo 结构体
@@ -20,23 +18,21 @@ export interface CaptchaResultModel {
   /**
    * 验证码图片Base64
    */
-  captchaImage: string;
+  imgPath: string;
 
   /**
    * 验证码唯一标识
    */
-  captchaId: string;
+  captchaID: string;
 }
 
 /**
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  // Helio: 字段全部替换
-  tokenName: string;
-  tokenValue: string;
-  roles: string[];
-  permissions: string[];
+  code: number;
+  token: string;
+  expire: string;
 }
 
 /**

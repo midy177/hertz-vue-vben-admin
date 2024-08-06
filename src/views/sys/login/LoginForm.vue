@@ -25,21 +25,30 @@
       />
     </FormItem>
 
-    <FormItem name="captcha" v-if="usingCaptcha">
-      <ARow :gutter="8">
-        <ACol :span="17">
-          <Input v-model:value="captchaState.captchaAnswer" />
-        </ACol>
-        <ACol :span="7">
-          <AImage
-            :preview="false"
-            width="196"
-            height="50"
-            v-model:src="captchaState.captchaImage"
+    <FormItem name="captcha" v-if="usingCaptcha" class="enter-x">
+      <!--      <ARow :gutter="8">-->
+      <!--        <ACol :span="17">-->
+      <Input size="large" v-model:value="captchaState.captcha">
+        <template #suffix>
+          <img
+            :src="captchaState.imgPath"
+            class="absolute right-0 h-full cursor-pointer"
             @click="fetchCaptcha"
+            alt="fetchCaptcha"
           />
-        </ACol>
-      </ARow>
+        </template>
+      </Input>
+      <!--        </ACol>-->
+      <!--        <ACol :span="7">-->
+      <!--          <AImage-->
+      <!--            :preview="false"-->
+      <!--            width="196"-->
+      <!--            height="50"-->
+      <!--            v-model:src="captchaState.imgPath"-->
+      <!--            @click="fetchCaptcha"-->
+      <!--          />-->
+      <!--        </ACol>-->
+      <!--      </ARow>-->
     </FormItem>
 
     <ARow class="enter-x">
@@ -101,7 +110,7 @@
 <script lang="ts" setup>
   import { reactive, ref, unref, computed, onMounted } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider, Image } from 'ant-design-vue';
+  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import {
     GithubFilled,
     WechatFilled,
@@ -124,11 +133,11 @@
 
   const ACol = Col;
   const ARow = Row;
-  const AImage = Image;
+  // const AImage = Image;
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { notification, createErrorModal } = useMessage();
+  const { notification } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
 
@@ -142,9 +151,10 @@
   const rememberMe = ref(false);
 
   // Helio: 登录验证码（可选，默认不启用）
-  const usingCaptcha = ref(false);
+  const usingCaptcha = ref(true);
   const captchaState = reactive<any & CaptchaResultModel>({
-    captchaAnswer: null,
+    captchaID: null,
+    imgPath: null,
     isFetching: false,
   });
   const fetchCaptcha = async () => {
@@ -156,15 +166,16 @@
       }
       captchaState.isFetching = true;
       const captchaInfo = await fetchCaptchaApi();
-      Object.assign(captchaState, captchaInfo);
-      captchaState.captchaAnswer = null;
+      captchaState.captchaID = captchaInfo.captchaID;
+      captchaState.imgPath = captchaInfo.imgPath;
+      captchaState.captcha = null;
       captchaState.isFetching = false;
     }
   };
   const validateCaptchaInput = () => {
     if (unref(usingCaptcha)) {
       // 启用了登录验证码
-      if (isEmpty(captchaState.captchaAnswer)) {
+      if (isEmpty(captchaState.captcha)) {
         notification.error({
           message: '错误',
           description: '请输入验证码',
@@ -198,11 +209,9 @@
         password: data.password,
         username: data.account,
         mode: 'none', //不要默认的错误提示
-        // Helio: 增加"记住我"参数
-        rememberMe: rememberMe.value,
         // Helio: 登录验证码（可选）
-        captchaId: captchaState.captchaId,
-        captchaAnswer: captchaState.captchaAnswer,
+        captchaID: captchaState.captchaID,
+        captcha: captchaState.captcha,
       });
       if (userInfo) {
         notification.success({

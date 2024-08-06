@@ -10,19 +10,18 @@ import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '@/hooks/setting';
 import { useMessage } from '@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum';
-import { isString, isUndefined, isNull, isEmpty } from '@/utils/is';
+import { isString } from '@/utils/is';
 import { getToken } from '@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '@/utils';
 import { useErrorLogStoreWithOut } from '@/store/modules/errorLog';
 import { useI18n } from '@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { useUserStoreWithOut } from '@/store/modules/user';
 import { AxiosRetry } from '@/utils/http/axios/axiosRetry';
 import axios from 'axios';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal, createSuccessModal } = useMessage();
+const { createMessage, createErrorModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -55,22 +54,22 @@ const transform: AxiosTransform = {
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     // Helio: 将 { code，result，message } 修改为 { code, data, msg }
-    const { code, data, msg } = responseBody;
+    const { statusCode, data, statusMsg } = responseBody;
 
     // Helio: 指定兜底异常提示文案
     const timeoutMsg = t('sys.api.apiRequestFailed');
 
     // 这里逻辑可以根据项目进行修改
     // Helio: 这边实际上是处理访问成功，但 `code` 字段的值不符合“操作成功”定义（Helio 中默认为 200）
-    switch (code) {
+    switch (statusCode) {
       case ResultEnum.OK:
         // 200 OK，直接返回结果
         return data;
       default:
         // 其他所有错误, 必须要有msg
-        if (msg) {
-          createMessage.error(msg);
-          Promise.reject(new Error(msg));
+        if (statusMsg) {
+          createMessage.error(statusMsg);
+          Promise.reject(new Error(statusMsg));
         }
         break;
     }

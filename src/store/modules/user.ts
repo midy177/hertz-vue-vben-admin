@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RoleEnum } from '@/enums/roleEnum';
 import { PageEnum } from '@/enums/pageEnum';
-import { PERMISSIONS_KEY, ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '@/api/sys/model/userModel';
 import { doLogout, getUserInfo, loginApi } from '@/api/sys/user';
@@ -86,14 +86,18 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        const { tokenValue, roles, permissions } = data;
-
+        console.log('loginParams', loginParams);
+        const resp = await loginApi(loginParams, mode);
+        const { statusCode, statusMsg, data } = resp;
+        if (statusCode !== 0) {
+          return Promise.reject(statusMsg);
+        }
         // save token
-        this.setToken(tokenValue);
-        // Helio: 记录角色和权限值
-        setAuthCache(ROLES_KEY, roles);
-        setAuthCache(PERMISSIONS_KEY, permissions);
+        this.setToken(data?.token);
+        // 获取角色
+        // setAuthCache(ROLES_KEY, roles);
+        // 获取权限列表
+        // setAuthCache(PERMISSIONS_KEY, permissions);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -142,7 +146,7 @@ export const useUserStore = defineStore({
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);
-      goLogin && router.push(PageEnum.BASE_LOGIN);
+      goLogin && (await router.push(PageEnum.BASE_LOGIN));
     },
 
     /**

@@ -9,10 +9,10 @@ import {
 import { ErrorMessageMode } from '#/axios';
 
 enum Api {
-  Captcha = '/api/v1/auth/captcha',
-  Login = '/api/v1/auth/login',
+  Captcha = '/api/captcha',
+  Login = '/api/login',
   Logout = '/api/v1/auth/logout',
-  GetUserInfo = '/api/v1/sys/users/info',
+  GetUserInfo = '/api/admin/user/info',
   // Helio: 去除 GetPermCode 接口调用
   TestRetry = '/testRetry',
 }

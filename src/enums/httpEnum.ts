@@ -3,7 +3,8 @@
  */
 export enum ResultEnum {
   // Helio: 去除所有原定义枚举值；换成OK
-  OK = 200,
+  OK = 0,
+  ERROR = 1,
 }
 
 /**

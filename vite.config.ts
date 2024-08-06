@@ -16,11 +16,11 @@ export default defineApplicationConfig({
     },
     server: {
       proxy: {
-        '/basic-api': {
-          target: 'http://localhost:3000',
+        '/api': {
+          target: 'http://127.0.0.1:8191',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
+          // rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
           // only https
           // secure: false
         },

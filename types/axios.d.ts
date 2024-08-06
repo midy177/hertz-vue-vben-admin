@@ -36,13 +36,9 @@ export interface RetryRequest {
   waitTime: number;
 }
 export interface Result<T = any> {
-  /*
-  Helio: 修改为对应后端字段名
-   */
-  code: number;
-  type: 'success' | 'error' | 'warning';
-  msg: string;
-  data: T;
+  statusCode: number;
+  statusMsg: string;
+  data?: T;
 }
 
 // multipart/form-data: upload file
