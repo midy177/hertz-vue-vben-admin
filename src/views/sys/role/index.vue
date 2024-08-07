@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <!--    新增按钮    -->
-        <a-button v-if="hasPermission('SysRole:create')" type="primary" @click="handleInsert">
+        <a-button v-if="hasPermission('role:create')" type="primary" @click="handleInsert">
           新增
         </a-button>
       </template>
@@ -13,25 +13,25 @@
           :actions="[
             {
               tooltip: '详情',
-              ifShow: hasPermission('SysRole:retrieve'),
+              ifShow: hasPermission('role:retrieve'),
               icon: 'ant-design:eye-outlined',
               onClick: handleRetrieveDetail.bind(null, record),
             },
             {
               tooltip: '编辑',
-              ifShow: hasPermission('SysRole:update'),
+              ifShow: hasPermission('role:update'),
               icon: 'clarity:note-edit-line',
               onClick: handleUpdate.bind(null, record),
             },
             {
               tooltip: '绑定菜单',
-              ifShow: hasPermission('SysRole:bindMenus'),
+              ifShow: hasPermission('role:bindMenus'),
               icon: 'ant-design:setting-outlined',
               onClick: handleBindMenus.bind(null, record),
             },
             {
               tooltip: '删除',
-              ifShow: hasPermission('SysRole:delete'),
+              ifShow: hasPermission('role:delete'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {

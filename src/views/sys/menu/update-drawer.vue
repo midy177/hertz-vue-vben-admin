@@ -14,9 +14,13 @@
   import { ref, computed, unref } from 'vue';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
-  import { insertOrUpdateFormSchema } from '@/views/sys/SysMenu/data';
-  import { createSysMenuApi, listSysMenuApi, updateSysMenuApi } from '@/api/sys/SysMenuApi';
-  import { DEFAULT_TREE_SELECT_FIELD_NAMES } from '@/helio/constants/fieldNamesConstant';
+  import { insertOrUpdateFormSchema } from '@/views/sys/menu/data';
+  import {
+    createSysMenuApi,
+    listAllMenuApi,
+    updateSysMenuApi,
+  } from '@/api/sys/SysMenuApi';
+  import { RouteItem } from '@/api/sys/model/menuModel';
 
   const isUpdateView = ref(true);
   let recordId: string;
@@ -36,33 +40,75 @@
   });
 
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    resetFields();
+    await resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdateView.value = !!data?.isUpdateView;
 
     if (unref(isUpdateView)) {
-      setFieldsValue({
+      await setFieldsValue({
         ...data.record,
       });
     }
 
     // 主键ID
-    recordId = data.record?.id || null;
+    recordId = data.record?.ID || null;
 
     // 加载：菜单下拉框数据
-    const parentIdTreeData = await listSysMenuApi();
+    let parentIdTreeData = await listAllMenuApi();
+    parentIdTreeData.push({
+      level: 0,
+      name: 'root',
+      ID: 1,
+      menuType: 0,
+      parentID: 1,
+      path: '',
+      redirect: '',
+      component: '',
+      orderNo: 0,
+      disabled: false,
+      children: [],
+      meta: {
+        title: '根路径',
+        icon: '',
+        hideMenu: false,
+        hideBreadcrumb: false,
+        currentActiveMenu: '',
+        ignoreKeepAlive: false,
+        hideTab: false,
+        frameSrc: '',
+        carryParam: false,
+        hideChildrenInMenu: false,
+        affix: false,
+        dynamicLevel: 0,
+        realPath: '',
+      },
+    });
+    const travel = function (data: RouteItem[]): RouteItem[] {
+      if (data.length === 0) {
+        return data;
+      }
+      for (let i = 0; i < data.length; i++) {
+        data[i].name = data[i].meta.title;
+        if (data[i].children) {
+          data[i].children = travel(data[i].children);
+        }
+      }
+      return data;
+    };
+
+    parentIdTreeData = travel(parentIdTreeData);
     await updateSchema({
-      field: 'parentId',
+      field: 'parentID',
       componentProps: {
         treeData: parentIdTreeData,
-        fieldNames: DEFAULT_TREE_SELECT_FIELD_NAMES,
+        // fieldNames: DEFAULT_TREE_SELECT_FIELD_NAMES,
       },
     });
 
     // 列表页透传的默认上级菜单
     const parent = data.parent;
     if (parent) {
-      setFieldsValue({
+      await setFieldsValue({
         parentId: parent.id,
         // 默认在上级权限后拼接":"
         permission: parent.permission ? parent.permission + ':' : null,

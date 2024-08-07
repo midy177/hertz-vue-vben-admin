@@ -4,10 +4,10 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RoleEnum } from '@/enums/roleEnum';
 import { PageEnum } from '@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
+import {PERMISSIONS_KEY, ROLES_KEY, TOKEN_KEY, USER_INFO_KEY} from '@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '@/api/sys/user';
+import {GetPermCodeModel, GetUserInfoModel, LoginParams} from '@/api/sys/model/userModel';
+import {doLogout, getPermCode, getUserInfo, loginApi} from '@/api/sys/user';
 import { useI18n } from '@/hooks/web/useI18n';
 import { useMessage } from '@/hooks/web/useMessage';
 import { router } from '@/router';
@@ -86,16 +86,10 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        console.log('loginParams', loginParams);
         const resp = await loginApi(loginParams, mode);
-        const { statusCode, statusMsg, data } = resp;
-        if (statusCode !== 0) {
-          return Promise.reject(statusMsg);
-        }
+        const { token } = resp;
         // save token
-        this.setToken(data?.token);
-        // 获取角色
-        // setAuthCache(ROLES_KEY, roles);
+        this.setToken(token);
         // 获取权限列表
         // setAuthCache(PERMISSIONS_KEY, permissions);
         return this.afterLoginAction(goHome);
@@ -107,7 +101,7 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       // get user info
       const userInfo = await this.getUserInfoAction();
-
+      await this.getPermCodeAction();
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -121,7 +115,7 @@ export const useUserStore = defineStore({
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
           permissionStore.setDynamicAddedRoute(true);
         }
-        goHome && (await router.replace(userInfo?.homePath ?? PageEnum.BASE_HOME));
+        goHome && (await router.replace(PageEnum.BASE_HOME));
       }
       return userInfo;
     },
@@ -130,7 +124,16 @@ export const useUserStore = defineStore({
       const userInfo = await getUserInfo();
       // Helio: 去除 role 相关
       this.setUserInfo(userInfo);
+      // 获取角色
+      setAuthCache(ROLES_KEY, [userInfo?.roleValue]);
       return userInfo;
+    },
+    async getPermCodeAction(): Promise<GetPermCodeModel | null> {
+      if (!this.getToken) return null;
+      const permissions = await getPermCode();
+      // Helio: 去除 role 相关
+      setAuthCache(PERMISSIONS_KEY, permissions);
+      return permissions;
     },
     /**
      * @description: logout

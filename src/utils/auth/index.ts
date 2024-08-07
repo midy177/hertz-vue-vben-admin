@@ -33,5 +33,7 @@ export function hasPermission(permission: string): boolean {
   if (!ownedPermissions) {
     return false;
   }
-  return ownedPermissions.indexOf(permission) > -1;
+  return permission.length > 0;
+  // 暂时未实现，后续实现
+  // return ownedPermissions.indexOf(permission) > -1;
 }

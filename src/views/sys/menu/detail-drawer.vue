@@ -1,7 +1,7 @@
 <template>
   <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="查看详情" width="40%">
     <Description
-      size="large"
+      size="default"
       title=""
       :bordered="true"
       :column="1"
@@ -15,11 +15,12 @@
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { Description } from '@/components/Description';
   import { retrieveDetailFormSchema } from './data';
-  import { retrieveSysMenuApi } from '@/api/sys/SysMenuApi';
+  // import { retrieveSysMenuApi } from '@/api/sys/SysMenuApi';
 
   const record = ref({});
 
   const [registerDrawer] = useDrawerInner(async (data) => {
-    record.value = await retrieveSysMenuApi(data.record.id);
+    record.value = data.record;
+    // record.value = await retrieveSysMenuApi(data.record.ID);
   });
 </script>

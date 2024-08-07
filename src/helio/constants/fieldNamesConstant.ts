@@ -10,9 +10,9 @@ export const DEFAULT_TREE_SELECT_FIELD_NAMES = {
   // 组件children字段，对应数据源的children字段
   children: 'children',
   // 组件label字段，对应数据源的title字段
-  label: 'title',
+  label: 'name',
   // 组件value字段：对应数据源的id字段
-  value: 'id',
+  value: 'ID',
 };
 
 /**

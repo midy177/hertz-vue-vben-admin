@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <!--    新增按钮    -->
-        <a-button v-if="hasPermission('SysMenu:create')" type="primary" @click="handleInsert">
+        <a-button v-if="hasPermission('menu:create')" type="primary" @click="handleInsert">
           新增
         </a-button>
       </template>
@@ -13,25 +13,25 @@
           :actions="[
             {
               tooltip: '详情',
-              ifShow: hasPermission('SysMenu:retrieve'),
+              ifShow: hasPermission('menu:retrieve'),
               icon: 'ant-design:eye-outlined',
               onClick: handleRetrieveDetail.bind(null, record),
             },
-            {
-              tooltip: '新增下级菜单',
-              ifShow: hasPermission('SysMenu:create'),
-              icon: 'ant-design:plus-outlined',
-              onClick: handleInsert.bind(null, record),
-            },
+            // {
+            //   tooltip: '新增下级菜单',
+            //   ifShow: hasPermission('menu:create'),
+            //   icon: 'ant-design:plus-outlined',
+            //   onClick: handleInsert.bind(null, record),
+            // },
             {
               tooltip: '编辑',
-              ifShow: hasPermission('SysMenu:update'),
+              ifShow: hasPermission('menu:update'),
               icon: 'clarity:note-edit-line',
               onClick: handleUpdate.bind(null, record),
             },
             {
               tooltip: '删除',
-              ifShow: hasPermission('SysMenu:delete'),
+              ifShow: hasPermission('menu:delete'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
@@ -54,7 +54,7 @@
   import { useDrawer } from '@/components/Drawer';
   import { hasPermission } from '@/utils/auth';
   import { columns } from './data';
-  import { deleteSysMenuApi, listSysMenuApi } from '@/api/sys/SysMenuApi';
+  import { deleteSysMenuApi, listAllMenuApi } from '@/api/sys/SysMenuApi';
   import SysMenuDetailDrawer from './detail-drawer.vue';
   import SysMenuUpdateDrawer from './update-drawer.vue';
 
@@ -64,7 +64,7 @@
   const [registerUpdateDrawer, { openDrawer: openUpdateDrawer }] = useDrawer();
   const [registerTable, { reload }] = useTable({
     title: '菜单管理',
-    api: listSysMenuApi,
+    api: listAllMenuApi,
     columns,
     // 不显示查询条件
     useSearchForm: false,
@@ -113,7 +113,7 @@
    * 单击删除按钮事件
    */
   async function handleDelete(record: Recordable) {
-    await deleteSysMenuApi([record.id]);
+    await deleteSysMenuApi([record.ID]);
     await reload();
   }
 

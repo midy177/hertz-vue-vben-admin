@@ -132,10 +132,10 @@
               }
               const getField = get(_data, field);
               // eslint-disable-next-line
-              if (getField && !toRefs(_data).hasOwnProperty(field)) {
+              if (!getField && !Object.prototype.hasOwnProperty.call(toRefs(_data), field)) {
                 return isFunction(render) ? render('', _data) : '';
               }
-              return isFunction(render) ? render(getField, _data) : getField ?? '';
+              return isFunction(render) ? render(getField, _data) : (getField ?? '');
             };
 
             const width = contentMinWidth;

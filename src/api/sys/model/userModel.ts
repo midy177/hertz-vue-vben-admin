@@ -39,15 +39,22 @@ export interface LoginResultModel {
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {
-  // 用户id
-  userId: string | number;
-  // 用户名
-  username: string;
-  // 昵称
-  // Helio: `realName` 替换为 `nickname`
-  nickname: string;
-  // 头像
+  ID: number;
   avatar: string;
-  // 介绍
-  desc?: string;
+  roleID: number;
+  mobile: string;
+  email: string;
+  status: number;
+  username: string;
+  nickname: string;
+  roleName: string;
+  createdAt: string;
+  updatedAt: string;
+  roleValue: string;
+  sideMode: string;
+}
+
+export interface GetPermCodeModel {
+  permissions: string[];
+  roles: string[];
 }

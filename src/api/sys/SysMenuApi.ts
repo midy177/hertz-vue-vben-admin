@@ -1,9 +1,10 @@
 import { defHttp } from '@/utils/http/axios';
 import { SysMenuApiResult, SysMenuInsertOrUpdateForm } from './model/SysMenuModel';
 import { menu2Tree } from '@/api/sys/menu';
-import { RouteItem } from '@/api/sys/model/menuModel';
+import { MenuListModel } from '@/api/sys/model/menuModel';
 
 enum Api {
+  GetAllMenu = '/api/admin/menu/list',
   REST = '/api/v1/sys/menus',
 }
 
@@ -11,7 +12,8 @@ enum Api {
  * 取所有菜单
  */
 export const listAllMenuApi = async () => {
-  return await defHttp.get<RouteItem[]>({ url: `${Api.REST}/all` });
+  const res = await defHttp.get<MenuListModel>({ url: Api.GetAllMenu });
+  return res.data;
 };
 
 /**

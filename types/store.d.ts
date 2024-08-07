@@ -35,13 +35,19 @@ export interface ErrorLogInfo {
 }
 
 export interface UserInfo {
-  userId: string | number;
+  ID: number;
+  avatar: string;
+  roleID: number;
+  mobile: string;
+  email: string;
+  status: number;
   username: string;
   nickname: string;
-  avatar: string;
-  desc?: string;
-  homePath?: string;
-  // Helio: 去除 roles 字段
+  roleName: string;
+  createdAt: string;
+  updatedAt: string;
+  roleValue: string;
+  sideMode: string;
 }
 
 export interface BeforeMiniState {

@@ -137,7 +137,7 @@
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { notification } = useMessage();
+  const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
 
@@ -190,7 +190,7 @@
   const formData = reactive({
     // Helio: 默认账号密码修改为 `admin`
     account: 'admin',
-    password: 'admin',
+    password: 'hertz-admin',
   });
 
   const { validForm } = useFormValid(formRef);
@@ -206,9 +206,9 @@
     try {
       loading.value = true;
       const userInfo = await userStore.login({
-        password: data.password,
         username: data.account,
-        mode: 'none', //不要默认的错误提示
+        password: data.password,
+        mode: 'modal', //不要默认的错误提示
         // Helio: 登录验证码（可选）
         captchaID: captchaState.captchaID,
         captcha: captchaState.captcha,
@@ -221,9 +221,11 @@
         });
       }
       // Helio: 去除默认的 catch 代码块，由默认请求异常处理接管
-    } finally {
+    } catch (err) {
       loading.value = false;
       await fetchCaptcha();
+    } finally {
+      loading.value = false;
     }
   }
 

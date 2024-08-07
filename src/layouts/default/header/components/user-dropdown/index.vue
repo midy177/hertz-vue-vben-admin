@@ -18,7 +18,7 @@
           icon="ion:document-text-outline"
           v-if="getShowDoc"
         />
-        <MenuDivider v-if="getShowDoc" />
+        <Divider v-if="getShowDoc" />
         <MenuItem
           v-if="getUseLockPage"
           key="lock"
@@ -36,7 +36,7 @@
   <LockAction @register="register" />
 </template>
 <script lang="ts" setup>
-  import { Dropdown, Menu } from 'ant-design-vue';
+  import { Dropdown, Menu, Divider } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
   import { computed } from 'vue';
   import { DOC_URL } from '@/settings/siteSetting';
@@ -69,8 +69,8 @@
 
   const getUserInfo = computed(() => {
     // Helio: `realName` 修改为 `nickname`
-    const { nickname = '', avatar, desc } = userStore.getUserInfo || {};
-    return { nickname, avatar: avatar || headerImg, desc };
+    const { nickname = '', avatar } = userStore.getUserInfo || {};
+    return { nickname, avatar: avatar || headerImg };
   });
 
   const [register, { openModal }] = useModal();
