@@ -63,12 +63,12 @@ const transform: AxiosTransform = {
     // Helio: 这边实际上是处理访问成功，但 `code` 字段的值不符合“操作成功”定义（Helio 中默认为 200）
     switch (statusCode) {
       case ResultEnum.OK:
-        // 200 OK，直接返回结果
+        // 0 OK，直接返回结果
         return data;
       default:
         // 其他所有错误, 必须要有msg
         if (statusMsg) {
-          createMessage.error(statusMsg);
+          createErrorModal({ title: t('sys.api.errorTip'), content: statusMsg });
           Promise.reject(new Error(statusMsg));
         }
         break;
@@ -171,7 +171,7 @@ const transform: AxiosTransform = {
     // Helio: 将默认的请求失败提示方式改为 modal 模态框
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'modal';
     // Helio: 适配业务失败文案返回、入参校验失败文案返回字段名
-    const msg: string = response?.data?.data?.message || response?.data?.msg || '';
+    const msg: string = response?.data?.statusMsg || '';
     const err: string = error?.toString?.() ?? '';
     let errMessage = '';
 

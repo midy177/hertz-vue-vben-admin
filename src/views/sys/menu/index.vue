@@ -54,7 +54,7 @@
   import { useDrawer } from '@/components/Drawer';
   import { hasPermission } from '@/utils/auth';
   import { columns } from './data';
-  import { deleteSysMenuApi, listAllMenuApi } from '@/api/sys/SysMenuApi';
+  import { deleteMenuApi, listAllMenuApi } from '@/api/sys/SysMenuApi';
   import SysMenuDetailDrawer from './detail-drawer.vue';
   import SysMenuUpdateDrawer from './update-drawer.vue';
 
@@ -113,7 +113,7 @@
    * 单击删除按钮事件
    */
   async function handleDelete(record: Recordable) {
-    await deleteSysMenuApi([record.ID]);
+    await deleteMenuApi([record.ID]);
     await reload();
   }
 

@@ -1,14 +1,4 @@
-import type { RouteMeta } from 'vue-router';
-// export interface RouteItem {
-//   path: string;
-//   component: any;
-//   meta: RouteMeta;
-//   name?: string;
-//   alias?: string | string[];
-//   redirect?: string;
-//   caseSensitive?: boolean;
-//   children?: RouteItem[];
-// }
+import { RouteComponent, RouteMeta } from 'vue-router';
 
 /**
  *  author: ryan
@@ -19,21 +9,22 @@ export interface MenuListModel {
   data: RouteItem[];
 }
 
-// interface Meta {
-//   title: string;
-//   icon: string;
-//   hideMenu: boolean;
-//   hideBreadcrumb: boolean;
-//   currentActiveMenu: string;
-//   ignoreKeepAlive: boolean;
-//   hideTab: boolean;
-//   frameSrc: string;
-//   carryParam: boolean;
-//   hideChildrenInMenu: boolean;
-//   affix: boolean;
-//   dynamicLevel: number;
-//   realPath: string;
-// }
+// Menu Meta Data Interface
+interface Meta {
+  title: string;
+  icon: string;
+  hideMenu: boolean;
+  hideBreadcrumb: boolean;
+  currentActiveMenu: string;
+  ignoreKeepAlive: boolean;
+  hideTab: boolean;
+  frameSrc: string;
+  carryParam: boolean;
+  hideChildrenInMenu: boolean;
+  affix: boolean;
+  dynamicLevel: number;
+  realPath: string;
+}
 
 export interface RouteItem {
   ID: number;
@@ -44,10 +35,25 @@ export interface RouteItem {
   path: string;
   name: string;
   redirect: string;
-  component: string;
+  component: string | RouteComponent | (() => Promise<RouteComponent>) | undefined;
   orderNo: number;
   disabled: boolean;
   menuType: number;
   children: RouteItem[];
   meta: RouteMeta;
+}
+
+// Create or Update Menu Request Params Interface
+export interface CreateOrUpdateMenuReq {
+  ID: number;
+  parentID: number;
+  level: number;
+  path: string;
+  name: string;
+  redirect: string;
+  component: string;
+  orderNo: number;
+  disabled: boolean;
+  menuType: number;
+  meta: Meta;
 }

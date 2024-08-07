@@ -1,11 +1,11 @@
 import { defHttp } from '@/utils/http/axios';
-import { getMenuListResultModel, RouteItem } from './model/menuModel';
+import { MenuListModel, RouteItem } from './model/menuModel';
 import { SysMenuApiResult } from '@/api/sys/model/SysMenuModel';
 import { list2Tree } from '@/helio/converter/bizDataStructConverter';
 
 enum Api {
   // Helio: 修改为取侧边菜单接口地址
-  GetMenuList = '/api/admin/menu/role',
+  GetMenuListByRole = '/api/admin/menu/role',
 }
 
 /**
@@ -14,13 +14,13 @@ enum Api {
  */
 export function menu2Tree(
   items: RouteItem[] | SysMenuApiResult[],
-): getMenuListResultModel | SysMenuApiResult[] {
+): MenuListModel | SysMenuApiResult[] {
   return list2Tree(items);
 }
 
 // Helio: 修改为 async 异步调用，以便得到菜单列表后直接转为树结构
 export const getMenuList = async () => {
-  const res = await defHttp.get<getMenuListResultModel>({ url: Api.GetMenuList });
+  const res = await defHttp.get<MenuListModel>({ url: Api.GetMenuListByRole });
   // Helio: 由前端将列表转为树结构
   // return menu2Tree(res.data);
   return res.data;

@@ -15,12 +15,8 @@
   import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { insertOrUpdateFormSchema } from '@/views/sys/menu/data';
-  import {
-    createSysMenuApi,
-    listAllMenuApi,
-    updateSysMenuApi,
-  } from '@/api/sys/SysMenuApi';
-  import { RouteItem } from '@/api/sys/model/menuModel';
+  import { createMenuApi, listAllMenuApi, updateMenuApi } from '@/api/sys/SysMenuApi';
+  import {CreateOrUpdateMenuReq, RouteItem} from '@/api/sys/model/menuModel';
 
   const isUpdateView = ref(true);
   let recordId: string;
@@ -48,10 +44,9 @@
       await setFieldsValue({
         ...data.record,
       });
+      // 主键ID
+      recordId = data.record?.ID;
     }
-
-    // 主键ID
-    recordId = data.record?.ID || null;
 
     // 加载：菜单下拉框数据
     let parentIdTreeData = await listAllMenuApi();
@@ -127,9 +122,13 @@
       setDrawerProps({ confirmLoading: true });
 
       if (recordId) {
-        await updateSysMenuApi(recordId, values);
+        // 编辑
+        values.ID = recordId;
+        await updateMenuApi(<CreateOrUpdateMenuReq>values);
       } else {
-        await createSysMenuApi(values);
+        // 新增
+        values.ID = null;
+        await createMenuApi(<CreateOrUpdateMenuReq>values);
       }
 
       closeDrawer();
