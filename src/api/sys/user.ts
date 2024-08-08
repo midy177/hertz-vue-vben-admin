@@ -15,6 +15,7 @@ enum Api {
   Logout = '/api/logout',
   GetUserInfo = '/api/admin/user/info',
   GetPermCode = '/api/admin/user/perm',
+  ChangePassword = '/api/admin/user/password',
   // Helio: 去除 GetPermCode 接口调用
   TestRetry = '/testRetry',
 }
@@ -67,6 +68,20 @@ export function doLogout() {
   // Helio: 登出方法改为 POST 请求
   return defHttp.post({ url: Api.Logout });
 }
+
+/**
+ * 后台用户-重置某用户密码
+ * @param userId 用户ID
+ * @param randomPassword 随机字符串新密码
+ */
+export const resetSysUserPasswordApi = async (userId: string, randomPassword: string) => {
+  return defHttp.put<void>({
+    url: Api.ChangePassword,
+    params: {
+      randomPassword,
+    },
+  });
+};
 
 export function testRetry() {
   return defHttp.get(

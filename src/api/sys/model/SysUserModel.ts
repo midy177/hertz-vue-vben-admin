@@ -1,96 +1,43 @@
-/**
- * @model 后台用户
- */
-
-/*
- ---- REQUEST ----
- */
-
-/**
- * 后台用户-新增/编辑请求体
- */
-export interface SysUserInsertOrUpdateForm {
-  /**
-   * 账号
-   */
-  pin: string;
-
-  /**
-   * 密码
-   */
-  pwd: string;
-
-  /**
-   * 昵称
-   */
+export interface UserListReq {
+  page: number;
+  pageSize: number;
+  username: string;
   nickname: string;
-
-  /**
-   * 状态(0=禁用 1=启用)
-   */
-  status: string;
-
-  /**
-   * 性别
-   */
-  gender: string;
-
-  /**
-   * 邮箱
-   */
   email: string;
-
-  /**
-   * 手机号
-   */
-  phoneNo: string;
-
-  /**
-   * 最后登录时刻
-   */
-  lastLoginAt: string;
+  mobile: string;
 }
 
-/**
- * 后台用户-修改当前用户密码请求体
- */
-export interface SysUserUpdatePasswordForm {
-  /**
-   * 原密码
-   */
-  oldPassword: string;
-
-  /**
-   * 新密码
-   */
-  newPassword: string;
-
-  /**
-   * 确认新密码
-   */
-  confirmNewPassword: string;
+export interface UserInfo {
+  ID: number; // 用户ID
+  avatar: string; // 用户头像
+  roleID: number; // 角色ID
+  mobile: string; // 手机号码
+  email: string; // 邮箱地址
+  status: number; // 用户状态
+  username: string; // 用户名
+  nickname: string; // 昵称
+  roleName: string; // 角色名称
+  createdAt: string; // 创建时间
+  updatedAt: string; // 更新时间
+  roleValue: string; // 角色值
+  sideMode: string; // 侧边栏模式
 }
 
-/*
- ---- RESPONSE ----
- */
+export interface CreateOrUpdateUserReq {
+  ID: number; // 用户ID
+  avatar: string; // 用户头像
+  roleID: number; // 角色ID
+  mobile: string; // 手机号码
+  email: string; // 邮箱地址
+  status: number; // 用户状态
+  username: string; // 用户名
+  nickname: string; // 昵称
+  password: string; // 密码
+}
 
-/**
- * 后台用户-通用响应体
- */
-export type SysUserApiResult = SysUserInsertOrUpdateForm & {
-  /**
-   * 主键ID
-   */
-  id: string;
-
-  /**
-   * 创建时刻
-   */
-  createdAt: string;
-
-  /**
-   * 更新时刻
-   */
-  updatedAt: string;
-};
+export interface UserProfile {
+  avatar: string;
+  nickname: string;
+  email: string;
+  mobile: string;
+}

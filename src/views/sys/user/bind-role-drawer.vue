@@ -27,7 +27,6 @@
   import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { BasicTree } from '@/components/Tree';
-  import { bindRolesApi, listRelatedRoleIdsApi } from '@/api/sys/SysUserApi';
 
   const isUpdateView = ref(true);
   let userId: string;
@@ -74,9 +73,9 @@
     sysRoleSelectOptions.value = data.sysRoleSelectOptions;
 
     // 更新当前用户关联角色
-    listRelatedRoleIdsApi(userId).then((apiResult: string[]) => {
-      selectedRoleIds.value = apiResult;
-    });
+    // listRelatedRoleIdsApi(userId).then((apiResult: string[]) => {
+    //   selectedRoleIds.value = apiResult;
+    // });
   });
 
   const emit = defineEmits(['success', 'register']);
@@ -86,7 +85,7 @@
       setDrawerProps({ confirmLoading: true });
 
       if (userId) {
-        await bindRolesApi(userId, selectedRoleIds.value);
+        // await bindRolesApi(userId, selectedRoleIds.value);
       }
 
       closeDrawer();

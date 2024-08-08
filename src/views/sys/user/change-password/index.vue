@@ -14,7 +14,7 @@
   import { BasicForm, useForm } from '@/components/Form';
 
   import { formSchema } from './pwd.data';
-  import { updateCurrentSysUserPasswordApi } from '@/api/sys/SysUserApi';
+  // import { updateCurrentSysUserPasswordApi } from '@/api/sys/SysUserApi';
   import { useMessage } from '@/hooks/web/useMessage';
 
   const { createMessage } = useMessage();
@@ -31,11 +31,11 @@
     const values = await validate();
     const { oldPassword, newPassword, confirmNewPassword } = values;
 
-    await updateCurrentSysUserPasswordApi({
-      oldPassword,
-      newPassword,
-      confirmNewPassword,
-    });
+    // await updateCurrentSysUserPasswordApi({
+    //   oldPassword,
+    //   newPassword,
+    //   confirmNewPassword,
+    // });
 
     createMessage.success('修改成功, 请重新登录');
   }

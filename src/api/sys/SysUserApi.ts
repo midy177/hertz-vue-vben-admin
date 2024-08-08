@@ -1,39 +1,35 @@
 import { defHttp } from '@/utils/http/axios';
-import {
-  SysUserInsertOrUpdateForm,
-  SysUserApiResult,
-  SysUserUpdatePasswordForm,
-} from './model/SysUserModel';
+import {CreateOrUpdateUserReq, UserListReq, UserProfile} from "@/api/sys/model/SysUserModel";
+import {BaseListResp} from "@/api/model/baseModel";
+import {UserInfo} from "#/store";
 
 enum Api {
-  REST = '/api/v1/sys/users',
+  Register = '/api/user/register',
+  OauthLogout = '/api/admin/token',
+  GetUserList = '/api/admin/user/list',
+  CreateUser = '/api/admin/user/create',
+  UpdateUser = '/api/admin/user/update',
+  DeleteUser = '/api/admin/user/delete',
+  SetUserStatus = '/api/admin/user/status',
+  GetProfile = '/api/admin/user/profile',
 }
 
 /**
  * 后台用户-分页列表
  */
-export const listSysUserApi = (queryForm: any) => {
-  return defHttp.get<SysUserApiResult[]>({
-    url: Api.REST,
+export const listSysUserApi = (queryForm: UserListReq) => {
+  return defHttp.get<BaseListResp<UserInfo>>({
+    url: Api.GetUserList,
     params: queryForm,
-  });
-};
-
-/**
- * 后台用户-详情
- */
-export const retrieveSysUserApi = (id: string) => {
-  return defHttp.get<SysUserApiResult>({
-    url: `${Api.REST}/${id}`,
   });
 };
 
 /**
  * 后台用户-新增
  */
-export const createSysUserApi = (insertForm: SysUserInsertOrUpdateForm) => {
+export const createSysUserApi = (insertForm: CreateOrUpdateUserReq) => {
   return defHttp.post<void>({
-    url: Api.REST,
+    url: Api.CreateUser,
     params: insertForm,
   });
 };
@@ -41,9 +37,9 @@ export const createSysUserApi = (insertForm: SysUserInsertOrUpdateForm) => {
 /**
  * 后台用户-编辑
  */
-export const updateSysUserApi = (id: string, updateForm: SysUserInsertOrUpdateForm) => {
+export const updateSysUserApi = (updateForm: CreateOrUpdateUserReq) => {
   return defHttp.put<void>({
-    url: `${Api.REST}/${id}`,
+    url: Api.UpdateUser,
     params: updateForm,
   });
 };
@@ -51,65 +47,34 @@ export const updateSysUserApi = (id: string, updateForm: SysUserInsertOrUpdateFo
 /**
  * 后台用户-删除
  */
-export const deleteSysUserApi = (ids: string[]) => {
+export const deleteSysUserApi = (id: number) => {
   return defHttp.delete<void>({
-    url: Api.REST,
+    url: Api.DeleteUser,
     params: {
-      ids: ids,
+      ID: id,
     },
   });
 };
 
 /**
- * 后台用户-重置某用户密码
- * @param userId 用户ID
- * @param randomPassword 随机字符串新密码
+ *  @description: set role's status
  */
-export const resetSysUserPasswordApi = async (userId: string, randomPassword: string) => {
-  return defHttp.put<void>({
-    url: `${Api.REST}/${userId}/password`,
-    params: {
-      randomPassword,
-    },
-  });
+export const setUserStatus = (id: number, status: number) => {
+  return defHttp.post({ url: Api.SetUserStatus, params: { id, status } });
 };
 
 /**
- * 后台用户-修改当前用户密码
+ *  author: Ryan Su
+ *  @description: Get user profile
  */
-export const updateCurrentSysUserPasswordApi = (form: SysUserUpdatePasswordForm) => {
-  return defHttp.post<void>({
-    url: `${Api.REST}/me/password:update`,
-    params: form,
-  });
+export const getUserProfile = () => {
+  return defHttp.get<UserProfile>({ url: Api.GetProfile }, { errorMessageMode: 'modal' });
 };
 
 /**
- * 后台用户-绑定用户与角色关联关系
+ *  author: Ryan Su
+ *  @description: update user profile
  */
-export const bindRolesApi = (userId: string, roleIds: string[]) => {
-  return defHttp.put<void>({
-    url: `${Api.REST}/${userId}/roles`,
-    params: {
-      roleIds: roleIds,
-    },
-  });
-};
-
-/**
- * 后台用户-踢下线
- */
-export const kickOutSysUserApi = (userId: string) => {
-  return defHttp.post<void>({
-    url: `${Api.REST}/${userId}:kick-out`,
-  });
-};
-
-/**
- * 后台用户-取指定用户关联角色ID
- */
-export const listRelatedRoleIdsApi = (userId: string) => {
-  return defHttp.get<string[]>({
-    url: `${Api.REST}/${userId}/roles`,
-  });
-};
+export function updateProfile(params: UserProfile) {
+  return defHttp.post<void>({ url: Api.GetProfile, params }, { errorMessageMode: 'modal' });
+}

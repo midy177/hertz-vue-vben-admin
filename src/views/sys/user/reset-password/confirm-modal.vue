@@ -14,7 +14,7 @@
   import { ref } from 'vue';
   import { BasicModal, useModalInner } from '@/components/Modal';
   import { Alert, notification } from 'ant-design-vue';
-  import { resetSysUserPasswordApi } from '@/api/sys/SysUserApi';
+  // import { resetSysUserPasswordApi } from '@/api/sys/SysUserApi';
 
   const username = ref<string>(),
     userId = ref<string>();
@@ -48,7 +48,7 @@
 
     const randomPassword = randomString(20);
 
-    await resetSysUserPasswordApi(userId.value, randomPassword);
+    // await resetSysUserPasswordApi(userId.value, randomPassword);
 
     notification.success({
       message: '重置成功',

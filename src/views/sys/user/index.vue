@@ -77,7 +77,7 @@
   import { useDrawer } from '@/components/Drawer';
   import { hasPermission } from '@/utils/auth';
   import { columns, queryFormSchema } from './data';
-  import { kickOutSysUserApi, deleteSysUserApi, listSysUserApi } from '@/api/sys/SysUserApi';
+  import { deleteSysUserApi, listSysUserApi } from '@/api/sys/SysUserApi';
   import SysUserDetailDrawer from './detail-drawer.vue';
   import SysUserUpdateDrawer from './update-drawer.vue';
   import BindRoleDrawer from './bind-role-drawer.vue';
@@ -114,6 +114,10 @@
       labelWidth: 120,
       // 查询条件配置
       schemas: queryFormSchema,
+    },
+    fetchSetting: {
+      listField: 'data',
+      totalField: 'total',
     },
     useSearchForm: true,
     showTableSetting: true,
@@ -165,7 +169,7 @@
   }
 
   async function handleDelete(record: Recordable) {
-    await deleteSysUserApi([record.id]);
+    await deleteSysUserApi(record.ID);
     await reload();
   }
 
@@ -212,12 +216,12 @@
   }
 
   async function handleKickOut(record: Recordable) {
-    await kickOutSysUserApi(record.id);
-    notification.success({
-      message: '成功',
-      description: '已强制踢下线',
-      duration: 3,
-    });
+    // await kickOutSysUserApi(record.id);
+    // notification.success({
+    //   message: '成功',
+    //   description: '已强制踢下线',
+    //   duration: 3,
+    // });
   }
 
   function handleDeptTreeSelected(deptId = '') {
