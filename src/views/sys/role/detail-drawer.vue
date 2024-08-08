@@ -15,11 +15,12 @@
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { Description } from '@/components/Description';
   import { retrieveDetailFormSchema } from './data';
-  import { retrieveSysRoleApi } from '@/api/sys/SysRoleApi';
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const record = ref({});
 
   const [registerDrawer] = useDrawerInner(async (data) => {
-    record.value = await retrieveSysRoleApi(data.record.id);
+    record.value = data.record;
   });
 </script>

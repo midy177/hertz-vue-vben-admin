@@ -1,7 +1,7 @@
 <template>
   <div>
     <BasicTable @register="registerTable" @edit-change="handleEditChange">
-      <template #bodyCell="{ column, record }">
+      <template v-slot:bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="createActions(record)" />
         </template>

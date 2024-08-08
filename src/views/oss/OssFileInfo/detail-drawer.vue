@@ -18,7 +18,8 @@
   import { retrieveOssFileInfoApi } from '@/api/oss/OssFileInfoApi';
 
   const record = ref({});
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const [registerDrawer] = useDrawerInner(async (data) => {
     record.value = await retrieveOssFileInfoApi(data.record.id);
   });

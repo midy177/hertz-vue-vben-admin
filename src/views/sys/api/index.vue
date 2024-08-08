@@ -55,13 +55,9 @@
   const [registerDetailDrawer, { openDrawer: openDetailDrawer }] = useDrawer();
   // 新增/编辑
   const [registerUpdateDrawer, { openDrawer: openUpdateDrawer }] = useDrawer();
-  const [registerTable, { reload, setPagination }] = useTable({
+  const [registerTable, { reload }] = useTable({
     title: 'API管理',
-    api: async (params) => {
-      const res = await getApiListApi(params);
-      setPagination({ total: res.total });
-      return res.data;
-    },
+    api: getApiListApi,
     columns,
     formConfig: {
       /*
@@ -71,6 +67,10 @@
       labelWidth: 120,
       // 查询条件配置
       schemas: queryFormSchema,
+    },
+    fetchSetting: {
+      listField: 'data',
+      totalField: 'total',
     },
     useSearchForm: true,
     showTableSetting: true,

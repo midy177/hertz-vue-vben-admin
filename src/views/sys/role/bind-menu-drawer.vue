@@ -8,99 +8,139 @@
     @ok="handleSubmit"
   >
     <p class="text-warning text-center">新授予的权限需要重新登录后才显示；收回的权限立即生效</p>
-    <BasicForm @register="registerForm">
-      <template #menu>
-        <!-- Helio: https://github.com/vbenjs/vue-vben-admin/issues/1420 -->
-        <BasicTree
-          ref="menuTreeRef"
-          v-model:checkedKeys="checkedMenuIds"
-          :treeData="menuTreeData"
-          :fieldNames="{ key: 'id' }"
+    <Tabs v-model:activeKey="activeKey" centered>
+      <TabPane key="1" tab="菜单">
+        <Tree
+          v-model:checkedKeys="checkedMenuKeys"
+          :onCheck="onCheck"
           checkable
-          toolbar
+          :height="600"
+          :tree-data="treeMenuData"
+          :checkStrictly="true"
         />
-      </template>
-    </BasicForm>
+      </TabPane>
+      <TabPane key="2" tab="API接口">
+        <Tree
+          v-model:checkedKeys="checkedApiKeys"
+          checkable
+          :height="600"
+          :tree-data="treeApiData"
+        />
+      </TabPane>
+    </Tabs>
   </BasicDrawer>
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { BasicForm, useForm } from '@/components/Form/index';
+  import { Tabs, TabPane, Tree } from 'ant-design-vue';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
-  import { bindMenusApi } from '@/api/sys/SysRoleApi';
-  import { BasicTree, TreeItem } from '@/components/Tree';
+  import { DataNode } from 'ant-design-vue/es/tree';
+  import { getMenuList } from '@/api/sys/menu';
+  import {
+    convertApiCheckedKeysToReq,
+    convertApiToCheckedKeys,
+    convertApiTreeData,
+    convertMenuTreeData,
+  } from '@/views/sys/role/data';
+  import {
+    updateMenuAuthorityApi,
+    getApiAuthorityApi,
+    getApiList,
+    getMenuAuthorityApi,
+    updateApiAuthorityApi,
+  } from '@/api/sys/SysApiAuthority';
+  import { ApiAuthorityInfo, ApiInfo } from '@/api/sys/model/SysApiModel';
+  import { BaseListResp } from '@/api/model/baseModel';
 
-  let recordId: string;
-  // 菜单树状数据
-  const menuTreeData = ref<TreeItem[]>([]);
-  // 被选中的菜单ID
-  const checkedMenuIds = ref<string[]>([]);
-  // 树组件Ref
-  const menuTreeRef = ref();
+  let recordId: number;
+  const activeKey = ref('1');
+  // defined menu items
+  const checkedMenuKeys = ref<number[]>([]);
+  const treeMenuData = ref<DataNode[]>([]);
+  const allCheckedKeys = ref<number[]>([]);
 
-  const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-    labelCol: {
-      span: 4,
-    },
-    wrapperCol: {
-      span: 24 - 4,
-    },
-    // Helio: 相较于 Vben 2.3.0 版本，需要添加下面这行来修正样式
-    baseColProps: { span: 24 },
-    schemas: [
-      {
-        label: '菜单列表',
-        field: '',
-        slot: 'menu',
-        component: 'Input',
-      },
-    ],
-    showActionButtonGroup: false,
-  });
-
-  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    resetFields();
-    setDrawerProps({ confirmLoading: false });
-
-    // 主键ID
-    recordId = data.record?.id || null;
-
-    // 列表页透传的菜单树状数据和map
-    menuTreeData.value = data.menuTreeData;
-    const hasChildMenuMap = data.hasChildMenuMap;
-
-    // 列表页透传的已选中菜单ID
-    // 三个菜单（父菜单A、子菜单A1、子菜单A2），都被角色1关联的情况下，如果新增了一个子菜单A3
-    // 由于父菜单A的缘故，未授权的子菜单A3会被错误地勾选，所以前端显示时剔除存在子项的父菜单，由父子联动自动勾选
-    checkedMenuIds.value = data.record.menuIds.filter((item) => !hasChildMenuMap.has(item));
-    menuTreeRef.value.resetEverChecked();
-
-    setFieldsValue({
-      ...data.record,
-    });
-  });
-
-  const emit = defineEmits(['success']);
-
-  async function handleSubmit() {
+  // defined api items
+  const checkedApiKeys = ref<number[]>([]);
+  const treeApiData = ref<DataNode[]>([]);
+  let apiData: BaseListResp<ApiInfo> = { data: [], total: 0 };
+  async function getMenuData() {
     try {
-      await validate();
-
-      setDrawerProps({ confirmLoading: true });
-
-      const everChecked = menuTreeRef.value.isEverChecked();
-      if (everChecked) {
-        // 发生过勾选事件，才请求接口更新
-        const newestMenuIds = [...checkedMenuIds.value, ...menuTreeRef.value.getHalfCheckedKeys()];
-        await bindMenusApi(recordId, newestMenuIds);
+      treeMenuData.value = [];
+      const res = await getMenuList();
+      const dataConv = convertMenuTreeData(res.data);
+      for (const key in dataConv) {
+        treeMenuData.value.push(dataConv[key]);
       }
+      // const roleId = await validate();
+      const checkedData = await getMenuAuthorityApi({ ID: recordId });
+      checkedMenuKeys.value = checkedData.MenuIDs;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getApiData() {
+    try {
+      treeApiData.value = [];
+      apiData = await getApiList({
+        page: 1,
+        pageSize: 10000,
+        path: '',
+        group: '',
+        method: '',
+        description: '',
+      });
+      const dataConv = convertApiTreeData(apiData.data);
+      for (const key in dataConv) {
+        treeApiData.value.push(dataConv[key]);
+      }
+      // const roleID = await validate();
+      const checkedData = await getApiAuthorityApi({ ID: recordId });
+      checkedApiKeys.value = convertApiToCheckedKeys(checkedData.data, apiData.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+    // await resetFields();
+    setDrawerProps({ confirmLoading: false });
+    // 主键ID
+    recordId = data.record?.ID || null;
+    await getMenuData();
+    await getApiData();
+    // await setFieldsValue({
+    //   ...data.record,
+    // });
+  });
 
-      closeDrawer();
-      if (everChecked) {
+  const emit = defineEmits(['success', 'register']);
+
+  //父子节点问题
+  function onCheck(checkedKeys, info) {
+    allCheckedKeys.value = checkedKeys.checked.concat(info.halfCheckedKeys); //将父节点拼接到子节点
+  }
+  // 编辑角色修改
+  async function handleSubmit() {
+    if (activeKey.value === '1') {
+      checkedMenuKeys.value = allCheckedKeys.value;
+      updateMenuAuthorityApi({
+        roleID: Number(recordId),
+        MenuIDs: checkedMenuKeys.value,
+      }).then(() => {
         emit('success');
-      }
-    } finally {
-      setDrawerProps({ confirmLoading: false });
+        closeDrawer();
+      });
+    } else {
+      const apiReqData: ApiAuthorityInfo[] = convertApiCheckedKeysToReq(
+        checkedApiKeys.value,
+        apiData.data,
+      );
+      updateApiAuthorityApi({
+        roleID: Number(recordId),
+        data: apiReqData,
+      }).then(() => {
+        emit('success');
+        closeDrawer();
+      });
     }
   }
 </script>

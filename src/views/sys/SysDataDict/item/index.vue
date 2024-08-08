@@ -51,7 +51,8 @@
   import { deleteSysDataDictItemApi, listSysDataDictItemApi } from '@/api/sys/SysDataDictApi';
   import SysDataDictUpdateDrawer from './update-drawer.vue';
   import { ref } from 'vue';
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const classifiedId = ref<string>('');
   const classifiedName = ref<string>();
   const [registerDrawer] = useDrawerInner((data) => {

@@ -218,7 +218,8 @@ export const usePermissionStore = defineStore({
           let routeList: AppRouteRecordRaw[] = [];
           try {
             // Helio: 不再调用 changePermissionCode
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            const res = await getMenuList();
+            routeList = res.data as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
           }

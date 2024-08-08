@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <BasicTable @register="registerTable">
-      <template #headerCell="{ column }">
+      <template v-slot:headerCell="{ column }">
         <template v-if="column.key === 'name'">
           <span>
             姓名

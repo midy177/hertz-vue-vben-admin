@@ -14,7 +14,7 @@
   import { ref, computed, unref } from 'vue';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
-  import { insertOrUpdateFormSchema } from '@/views/sys/role/data';
+  import { insertOrUpdateFormSchema } from '@/views/sys/api/data';
   import {createApiApi, updateApiApi} from "@/api/sys/SysApiApi";
   import {ApiInfo} from "@/api/sys/model/SysApiModel";
 
@@ -49,7 +49,7 @@
     }
   });
 
-  const emit = defineEmits(['success']);
+  const emit = defineEmits(['success', 'register']);
 
   async function handleSubmit() {
     try {

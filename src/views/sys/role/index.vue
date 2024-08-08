@@ -85,12 +85,16 @@
       // 查询条件配置
       schemas: queryFormSchema,
     },
-    useSearchForm: true,
+    fetchSetting: {
+      listField: 'data',
+      totalField: 'total',
+    },
+    useSearchForm: false,
     showTableSetting: true,
     bordered: true,
     showIndexColumn: false,
     actionColumn: {
-      width: 80,
+      width: 120,
       title: '操作',
       dataIndex: 'action',
       slots: { customRender: 'action' },
@@ -145,7 +149,7 @@
    * 单击删除按钮事件
    */
   async function handleDelete(record: Recordable) {
-    await deleteSysRoleApi([record.id]);
+    await deleteSysRoleApi(record.ID);
     await reload();
   }
 

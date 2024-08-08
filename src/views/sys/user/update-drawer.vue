@@ -68,7 +68,7 @@
     }
   });
 
-  const emit = defineEmits(['success']);
+  const emit = defineEmits(['success', 'register']);
 
   async function handleSubmit() {
     try {

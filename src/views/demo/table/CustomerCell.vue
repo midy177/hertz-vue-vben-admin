@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <BasicTable @register="registerTable">
-      <template #bodyCell="{ column, record, text }">
+      <template v-slot:bodyCell="{ column, record, text }">
         <template v-if="column.key === 'id'"> ID: {{ record.id }} </template>
         <template v-else-if="column.key === 'no'">
           <Tag color="green">

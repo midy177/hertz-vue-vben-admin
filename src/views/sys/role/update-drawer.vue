@@ -16,6 +16,7 @@
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { insertOrUpdateFormSchema } from '@/views/sys/role/data';
   import { createSysRoleApi, updateSysRoleApi } from '@/api/sys/SysRoleApi';
+  import {RoleInfo} from "@/api/sys/model/SysRoleModel";
 
   const isUpdateView = ref(true);
   let recordId: string;
@@ -28,19 +29,18 @@
     wrapperCol: {
       span: 24 - 4,
     },
-    // Helio: 相较于 Vben 2.3.0 版本，需要添加下面这行来修正样式
     baseColProps: { span: 24 },
     schemas: insertOrUpdateFormSchema,
     showActionButtonGroup: false,
   });
 
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    resetFields();
+    await resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdateView.value = !!data?.isUpdateView;
 
     if (unref(isUpdateView)) {
-      setFieldsValue({
+      await setFieldsValue({
         ...data.record,
       });
     }
@@ -49,7 +49,7 @@
     recordId = data.record?.id || null;
   });
 
-  const emit = defineEmits(['success']);
+  const emit = defineEmits(['success', 'register']);
 
   async function handleSubmit() {
     try {
@@ -59,9 +59,9 @@
       setDrawerProps({ confirmLoading: true });
 
       if (recordId) {
-        await updateSysRoleApi(recordId, values);
+        await updateSysRoleApi(<RoleInfo>values)
       } else {
-        await createSysRoleApi(values);
+        await createSysRoleApi(<RoleInfo>values);
       }
 
       closeDrawer();

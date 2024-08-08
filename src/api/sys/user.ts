@@ -3,7 +3,8 @@ import {
   LoginParams,
   LoginResultModel,
   GetUserInfoModel,
-  CaptchaResultModel, GetPermCodeModel,
+  CaptchaResultModel,
+  GetPermCodeModel,
 } from './model/userModel';
 
 import { ErrorMessageMode } from '#/axios';
@@ -11,7 +12,7 @@ import { ErrorMessageMode } from '#/axios';
 enum Api {
   Captcha = '/api/captcha',
   Login = '/api/login',
-  Logout = '/api/v1/auth/logout',
+  Logout = '/api/logout',
   GetUserInfo = '/api/admin/user/info',
   GetPermCode = '/api/admin/user/perm',
   // Helio: 去除 GetPermCode 接口调用

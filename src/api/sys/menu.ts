@@ -20,8 +20,7 @@ export function menu2Tree(
 
 // Helio: 修改为 async 异步调用，以便得到菜单列表后直接转为树结构
 export const getMenuList = async () => {
-  const res = await defHttp.get<MenuListModel>({ url: Api.GetMenuListByRole });
   // Helio: 由前端将列表转为树结构
   // return menu2Tree(res.data);
-  return res.data;
+  return await defHttp.get<MenuListModel>({ url: Api.GetMenuListByRole });
 };

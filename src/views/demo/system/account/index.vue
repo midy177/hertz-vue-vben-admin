@@ -6,7 +6,7 @@
         <a-button type="primary" @click="handleCreate">新增账号</a-button>
         <a-button type="primary" @click="handleExport">导出账号</a-button>
       </template>
-      <template #bodyCell="{ column, record }">
+      <template v-slot:bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[

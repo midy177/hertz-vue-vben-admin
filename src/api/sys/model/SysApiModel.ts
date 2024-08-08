@@ -12,3 +12,8 @@ export interface ApiInfo {
   group: string; // API 分组
   method: string; // 请求方法
 }
+
+export interface ApiAuthorityInfo {
+  path: string;
+  method: string;
+}

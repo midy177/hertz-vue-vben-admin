@@ -16,7 +16,8 @@
   import { Description } from '@/components/Description';
   import { retrieveDetailFormSchema } from './data';
   import { retrieveSysDeptApi } from '@/api/sys/SysDeptApi';
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const record = ref({});
 
   const [registerDrawer] = useDrawerInner(async (data) => {

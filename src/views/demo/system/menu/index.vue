@@ -4,7 +4,7 @@
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增菜单 </a-button>
       </template>
-      <template #bodyCell="{ column, record }">
+      <template v-slot:bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[

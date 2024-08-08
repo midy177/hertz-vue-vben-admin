@@ -15,7 +15,8 @@
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { Description } from '@/components/Description';
   import { retrieveDetailFormSchema } from './data';
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const record = ref({});
 
   const [registerDrawer] = useDrawerInner(async (data) => {

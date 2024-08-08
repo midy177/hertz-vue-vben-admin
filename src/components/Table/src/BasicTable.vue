@@ -27,12 +27,12 @@
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
-      <template #headerCell="{ column }">
+      <template v-slot:headerCell="{ column }">
         <slot name="headerCell" v-bind="{ column }">
           <HeaderCell :column="column" />
         </slot>
       </template>
-      <template #bodyCell="data">
+      <template v-slot:bodyCell="data">
         <slot name="bodyCell" v-bind="data || {}"></slot>
       </template>
     </Table>

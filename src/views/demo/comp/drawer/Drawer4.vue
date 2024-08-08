@@ -8,7 +8,8 @@
 <script lang="ts" setup>
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '@/components/Form';
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   const schemas: FormSchema[] = [
     {
       field: 'field1',

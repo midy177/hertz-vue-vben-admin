@@ -19,7 +19,8 @@
 </template>
 <script lang="ts" setup>
   import { BasicDrawer } from '@/components/Drawer';
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const emit = defineEmits(['register']);
   function handleOk() {
     console.log('=====================');
     console.log('ok');
