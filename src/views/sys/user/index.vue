@@ -1,7 +1,6 @@
 <template>
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <DeptTree class="w-1/4 xl:w-1/5" @select="handleDeptTreeSelected" />
-    <BasicTable class="w-3/4 xl:w-4/5" @register="registerTable" :searchInfo="searchInfo">
+    <BasicTable class="w-full xl:w-full" @register="registerTable" :searchInfo="searchInfo">
       <template #toolbar>
         <!--    新增按钮    -->
         <a-button v-if="hasPermission('SysUser:create')" type="primary" @click="handleInsert">
@@ -88,7 +87,6 @@
     useSysDeptSelectOptions,
     useSysRoleSelectOptions,
   } from '@/api/select-options/hooks/useSelectOptions';
-  import DeptTree from '@/views/sys/user/DeptTree.vue';
   import { reactive } from 'vue';
   import { PageWrapper } from '@/components/Page';
 
@@ -222,10 +220,5 @@
     //   description: '已强制踢下线',
     //   duration: 3,
     // });
-  }
-
-  function handleDeptTreeSelected(deptId = '') {
-    searchInfo.selectedDeptId = deptId;
-    reload();
   }
 </script>

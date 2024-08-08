@@ -28,7 +28,7 @@ export const columns: BasicColumn[] = [
   {
     title: '状态',
     dataIndex: 'status',
-    width: 20,
+    width: 30,
     customRender: ({ record }) => {
       if (!Reflect.has(record, 'pendingStatus')) {
         record.pendingStatus = false;
@@ -211,16 +211,12 @@ export const retrieveDetailFormSchema: DescItem[] = [
     label: '昵称',
   },
   {
-    field: 'statusLabel',
+    field: 'status',
     label: '状态',
   },
   {
-    field: 'genderLabel',
+    field: 'gender',
     label: '性别',
-  },
-  {
-    field: 'deptTitle',
-    label: '部门',
   },
   {
     field: 'email',
@@ -271,7 +267,7 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
       // 最短6位
       {
         trigger: 'blur',
-        min: 6,
+        min: 2,
       },
     ],
   },
