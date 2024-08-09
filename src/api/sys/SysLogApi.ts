@@ -1,25 +1,36 @@
 import { defHttp } from '@/utils/http/axios';
 import { SysLogApiResult } from './model/SysLogModel';
+import { BasePageReq } from '@/api/model/baseModel';
 
 enum Api {
-  REST = '/api/v1/sys/logs',
+  GetLogsList = '/api/admin/logs/list',
+  DeleteLogs = '/api/admin/logs/delete_all',
 }
 
 /**
  * 后台操作日志-分页列表
  */
-export const listSysLogApi = (queryForm: any) => {
-  // 选择的是日期，补全时分秒部分
-  if (queryForm.beginAt) {
-    queryForm.beginAt += ' 00:00:00';
-  }
+export const listSysLogApi = (queryForm: BasePageReq) => {
+  return defHttp.get<SysLogApiResult[]>(
+    {
+      url: Api.GetLogsList,
+      params: queryForm,
+    },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
+};
 
-  if (queryForm.endAt) {
-    queryForm.endAt += ' 23:59:59';
-  }
-
-  return defHttp.get<SysLogApiResult[]>({
-    url: Api.REST,
-    params: queryForm,
-  });
+/**
+ *  author: Ryan Su
+ *  @description: delete logs
+ */
+export const deleteAllSysLogApi = () => {
+  return defHttp.delete<void>(
+    { url: Api.DeleteLogs },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
 };
