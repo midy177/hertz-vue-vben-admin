@@ -66,6 +66,10 @@
     title: '菜单管理',
     api: listAllMenuApi,
     columns,
+    fetchSetting: {
+      listField: 'data',
+      totalField: 'total',
+    },
     // 不显示查询条件
     useSearchForm: false,
     showTableSetting: true,

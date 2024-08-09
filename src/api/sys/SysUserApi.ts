@@ -1,7 +1,7 @@
 import { defHttp } from '@/utils/http/axios';
-import {CreateOrUpdateUserReq, UserListReq, UserProfile} from "@/api/sys/model/SysUserModel";
-import {BaseListResp} from "@/api/model/baseModel";
-import {UserInfo} from "#/store";
+import { CreateOrUpdateUserReq, UserListReq, UserProfile } from '@/api/sys/model/SysUserModel';
+import { BaseListResp } from '@/api/model/baseModel';
+import { UserInfo } from '#/store';
 
 enum Api {
   Register = '/api/user/register',

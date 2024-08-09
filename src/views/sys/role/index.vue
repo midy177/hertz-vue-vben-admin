@@ -12,12 +12,6 @@
         <TableAction
           :actions="[
             {
-              tooltip: '详情',
-              ifShow: hasPermission('role:retrieve'),
-              icon: 'ant-design:eye-outlined',
-              onClick: handleRetrieveDetail.bind(null, record),
-            },
-            {
               tooltip: '编辑',
               ifShow: hasPermission('role:update'),
               icon: 'clarity:note-edit-line',
@@ -43,8 +37,6 @@
         />
       </template>
     </BasicTable>
-    <!--  详情侧边抽屉  -->
-    <SysRoleDetailDrawer @register="registerDetailDrawer" />
     <!--  编辑侧边抽屉  -->
     <SysRoleUpdateDrawer @register="registerUpdateDrawer" @success="handleSuccess" />
     <!--  绑定菜单侧边抽屉  -->
@@ -52,22 +44,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
   import { BasicTable, TableAction, useTable } from '@/components/Table';
   import { useDrawer } from '@/components/Drawer';
   import { hasPermission } from '@/utils/auth';
   import { columns, queryFormSchema } from './data';
   import { deleteSysRoleApi, listSysRoleApi } from '@/api/sys/SysRoleApi';
-  import SysRoleDetailDrawer from './detail-drawer.vue';
   import SysRoleUpdateDrawer from './update-drawer.vue';
   import BindMenuDrawer from './bind-menu-drawer.vue';
-  import { TreeItem } from '@/components/Tree';
-  import { listAllMenuApi } from '@/api/sys/SysMenuApi';
-  import { RouteItem } from '@/api/sys/model/menuModel';
-  import { menu2Tree } from '@/api/sys/menu';
 
-  // 查看详情
-  const [registerDetailDrawer, { openDrawer: openDetailDrawer }] = useDrawer();
   // 新增/编辑
   const [registerUpdateDrawer, { openDrawer: openUpdateDrawer }] = useDrawer();
   // 绑定角色
@@ -94,37 +78,13 @@
     bordered: true,
     showIndexColumn: false,
     actionColumn: {
-      width: 130,
+      width: 60,
       title: '操作',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
     },
   });
-
-  // 预加载：菜单树形框
-  const menuTreeData = ref<TreeItem[]>([]);
-  const hasChildMenuMap = ref<Map<string, boolean>>(new Map<string, boolean>());
-
-  async function fetchMenuTreeData() {
-    const apiResult: RouteItem[] = await listAllMenuApi();
-    menuTreeData.value = menu2Tree(apiResult) as unknown as TreeItem[];
-
-    const newHasChildMenuMap = new Map<string, boolean>();
-    apiResult.forEach((item) => {
-      newHasChildMenuMap.set(item.parentID, true);
-    });
-    hasChildMenuMap.value = newHasChildMenuMap;
-  }
-
-  fetchMenuTreeData();
-
-  /**
-   * 单击详情按钮事件
-   */
-  function handleRetrieveDetail(record: Recordable) {
-    openDetailDrawer(true, { record });
-  }
 
   /**
    * 单击新增按钮事件
@@ -166,8 +126,6 @@
   function handleBindMenus(record: Recordable) {
     openBindMenuDrawer(true, {
       record,
-      menuTreeData,
-      hasChildMenuMap,
     });
   }
 </script>

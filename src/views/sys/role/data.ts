@@ -16,22 +16,22 @@ export const columns: BasicColumn[] = [
   {
     title: '角色名',
     dataIndex: 'name',
-    width: 220,
+    width: 120,
   },
   {
     title: '角色编码',
     dataIndex: 'value',
-    width: 220,
+    width: 120,
   },
   {
     title: '排序',
     dataIndex: 'orderNo',
-    width: 80,
+    width: 40,
   },
   {
     title: '状态',
     dataIndex: 'status',
-    width: 220,
+    width: 40,
     customRender: ({ record }) => {
       if (!Reflect.has(record, 'pendingStatus')) {
         record.pendingStatus = false;
@@ -64,14 +64,14 @@ export const columns: BasicColumn[] = [
   {
     title: '创建时间',
     dataIndex: 'createdAt',
-    width: 220,
+    width: 120,
     customRender: ({ record }) => {
       return formatToDateTime(record.createdAt);
     },
   },
   {
     title: '备注',
-    width: 220,
+    width: 120,
     dataIndex: 'remark',
   },
 ];

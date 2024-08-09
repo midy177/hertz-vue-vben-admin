@@ -1,10 +1,10 @@
 import { BasicColumn, FormSchema } from '@/components/Table';
 import { h } from 'vue';
 import { Switch } from 'ant-design-vue';
-import { DescItem } from '@/components/Description';
 import { useMessage } from '@/hooks/web/useMessage';
 import { setUserStatus } from '@/api/sys/SysUserApi';
 import { formatToDateTime } from '@/utils/dateUtil';
+import { listSysRoleApi } from '@/api/sys/SysRoleApi';
 
 /**
  * 表格列
@@ -13,16 +13,21 @@ export const columns: BasicColumn[] = [
   {
     title: '账号',
     dataIndex: 'username',
-    width: 30,
+    width: 80,
   },
   {
     title: '昵称',
     dataIndex: 'nickname',
-    width: 30,
+    width: 80,
   },
   {
     title: '邮箱',
     dataIndex: 'email',
+    width: 80,
+  },
+  {
+    title: '手机号',
+    dataIndex: 'mobile',
     width: 80,
   },
   {
@@ -190,53 +195,51 @@ export const formSchema: FormSchema[] = [
  */
 export const queryFormSchema: FormSchema[] = [
   {
-    field: 'phoneNo',
-    label: '手机号',
-    component: 'Input',
-    componentProps: {},
-    colProps: { span: 8 },
-  },
-];
-
-/**
- * 查看详情表单
- */
-export const retrieveDetailFormSchema: DescItem[] = [
-  {
     field: 'username',
     label: '账号',
+    component: 'Input',
+    colProps: { span: 8 },
+    rules: [{ max: 30 }],
   },
   {
     field: 'nickname',
     label: '昵称',
+    component: 'Input',
+    colProps: { span: 8 },
+    rules: [{ max: 30 }],
   },
   {
-    field: 'status',
-    label: '状态',
+    field: 'roleID',
+    label: '角色名',
+    component: 'ApiSelect',
+    colProps: { span: 8 },
+    componentProps: {
+      api: listSysRoleApi,
+      labelField: 'remark',
+      valueField: 'ID',
+      resultField: 'data',
+      params: {
+        page: 1,
+        pageSize: 1000,
+      },
+    },
   },
   {
-    field: 'gender',
-    label: '性别',
+    field: 'mobile',
+    label: '手机号',
+    component: 'Input',
+    colProps: { span: 8 },
+    rules: [{ max: 18 }],
   },
   {
     field: 'email',
     label: '邮箱',
-  },
-  {
-    field: 'phoneNo',
-    label: '手机号',
-  },
-  {
-    field: 'lastLoginAt',
-    label: '最后登录时间',
-  },
-  {
-    field: 'createdAt',
-    label: '创建时间',
-  },
-  {
-    field: 'updatedAt',
-    label: '更新时间',
+    component: 'Input',
+    colProps: { span: 8 },
+    rules: [{ type: 'email' }],
+    componentProps: {
+      maxlength: 255,
+    },
   },
 ];
 
@@ -246,13 +249,18 @@ export const retrieveDetailFormSchema: DescItem[] = [
 const isUpdateView = (values: Recordable) => {
   return !!values.id;
 };
+
 export const insertOrUpdateFormSchema: FormSchema[] = [
   {
-    field: 'id',
-    // 只是为了带过来
-    label: '主键ID',
+    field: 'avatar',
+    label: '头像',
+    component: 'Input',
+  },
+  {
+    field: 'ID',
+    label: 'ID',
     component: 'Render',
-    ifShow: false,
+    show: false,
   },
   {
     field: 'username',
@@ -267,28 +275,9 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
       // 最短6位
       {
         trigger: 'blur',
-        min: 2,
+        min: 4,
       },
     ],
-  },
-  {
-    field: 'passwordOfNewUser',
-    label: '密码',
-    required: true,
-    component: 'InputPassword',
-    componentProps: {
-      placeholder: '最短8位，最长20位；建议使用复杂密码',
-      maxlength: 20,
-    },
-    rules: [
-      // 最短8位
-      {
-        trigger: 'blur',
-        min: 8,
-      },
-    ],
-    // Helio: 只在新增时显示
-    ifShow: ({ values }) => !isUpdateView(values),
   },
   {
     field: 'nickname',
@@ -296,58 +285,71 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
     required: true,
     component: 'Input',
     componentProps: {
-      maxlength: 100,
+      placeholder: '最短6位，最长16位',
+      maxlength: 16,
     },
+    rules: [{ min: 4 }],
   },
   {
-    field: 'status',
-    label: '状态',
-    required: false,
-    component: 'RadioButtonGroup',
-    defaultValue: 0,
-    componentProps: {
-      options: [
-        { label: '封禁', value: 0 },
-        { label: '正常', value: 1 },
-      ],
-    },
-  },
-  {
-    field: 'gender',
-    label: '性别',
-    required: false,
-    component: 'RadioButtonGroup',
-    defaultValue: 0,
-    componentProps: {
-      options: [
-        { label: '未知', value: 0 },
-        { label: '男', value: 1 },
-        { label: '女', value: 2 },
-      ],
-    },
+    field: 'mobile',
+    label: '手机号',
+    component: 'Input',
+    rules: [{ max: 18 }],
   },
   {
     field: 'email',
     label: '邮箱',
     required: true,
     component: 'Input',
+    rules: [{ type: 'email' }],
     componentProps: {
       maxlength: 255,
     },
   },
   {
-    field: 'phoneNo',
-    label: '手机号',
-    required: true,
-    component: 'Input',
+    field: 'password',
+    label: '密码',
+    component: 'InputPassword',
     componentProps: {
+      placeholder: '最短8位，最长20位；建议使用复杂密码',
       maxlength: 20,
+    },
+    rules: [
+      {
+        trigger: 'blur',
+        min: 6,
+      },
+    ],
+    required: (record) => {
+      return isUpdateView(record);
     },
   },
   {
-    field: 'deptId',
-    label: '所属部门',
-    required: false,
-    component: 'TreeSelect',
+    field: 'roleID',
+    label: '角色ID',
+    required: true,
+    component: 'ApiSelect',
+    componentProps: {
+      api: listSysRoleApi,
+      labelField: 'remark',
+      valueField: 'ID',
+      resultField: 'data',
+      params: {
+        page: 1,
+        pageSize: 1000,
+      },
+    },
+  },
+  {
+    field: 'status',
+    label: '状态',
+    component: 'RadioButtonGroup',
+    defaultValue: 1,
+    componentProps: {
+      options: [
+        { label: '启用', value: 1 },
+        { label: '禁用', value: 0 },
+      ],
+    },
   },
 ];

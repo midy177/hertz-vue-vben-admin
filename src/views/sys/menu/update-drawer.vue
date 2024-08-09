@@ -50,7 +50,7 @@
 
     // 加载：菜单下拉框数据
     let parentIdTreeData = await listAllMenuApi();
-    parentIdTreeData.push({
+    parentIdTreeData.data.push({
       level: 0,
       name: 'root',
       ID: 1,
@@ -91,11 +91,11 @@
       return data;
     };
 
-    parentIdTreeData = travel(parentIdTreeData);
+    parentIdTreeData.data = travel(parentIdTreeData.data);
     await updateSchema({
       field: 'parentID',
       componentProps: {
-        treeData: parentIdTreeData,
+        treeData: parentIdTreeData.data,
         // fieldNames: DEFAULT_TREE_SELECT_FIELD_NAMES,
       },
     });

@@ -4,6 +4,7 @@ import { Tag } from 'ant-design-vue';
 import Icon from '@/components/Icon/Icon.vue';
 import { DescItem } from '@/components/Description';
 import { formatToDateTime } from '@/utils/dateUtil';
+import { RouteItem } from '@/api/sys/model/menuModel';
 
 /**
  * 表格列
@@ -445,3 +446,16 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
     ifShow: ({ values }) => isMenu(values.menuType),
   },
 ];
+
+const travel = (data: RouteItem[]): RouteItem[] => {
+  if (data.length === 0) {
+    return data;
+  }
+  for (let i = 0; i < data.length; i++) {
+    data[i].name = data[i].meta.title;
+    if (data[i].children) {
+      data[i].children = travel(data[i].children);
+    }
+  }
+  return data;
+};

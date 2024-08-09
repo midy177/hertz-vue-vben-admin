@@ -15,14 +15,13 @@ enum Api {
 /**
  * 取所有菜单
  */
-export const listAllMenuApi = async () => {
-  const res = await defHttp.get<MenuListModel>(
+export const listAllMenuApi = () => {
+  return defHttp.get<MenuListModel>(
     { url: Api.GetMenuList },
     {
       errorMessageMode: 'modal',
     },
   );
-  return res.data;
 };
 
 /**

@@ -3,6 +3,7 @@
     v-bind="getAttrs"
     @change="handleChange"
     :field-names="fieldNames"
+    :replace-fields="fieldNames"
     :load-data="async ? onLoadData : undefined"
   >
     <template #[item]="data" v-for="item in Object.keys($slots)">
