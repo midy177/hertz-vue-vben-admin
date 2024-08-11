@@ -41,3 +41,9 @@ export interface UserProfile {
   email: string;
   mobile: string;
 }
+
+export interface ChangePasswordReq {
+  userID: number;
+  oldPassword: string;
+  newPassword: string;
+}

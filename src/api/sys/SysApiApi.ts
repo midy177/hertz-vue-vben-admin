@@ -1,6 +1,6 @@
-import {defHttp} from '@/utils/http/axios';
-import {BaseIdReq, BaseListResp, BasePageReq} from '@/api/model/baseModel';
-import {ApiInfo} from '@/api/sys/model/SysApiModel';
+import { defHttp } from '@/utils/http/axios';
+import { BaseIdReq, BaseListResp, BasePageReq } from '@/api/model/baseModel';
+import { ApiInfo } from '@/api/sys/model/SysApiModel';
 
 enum Api {
   GetApiList = '/api/admin/api/list',

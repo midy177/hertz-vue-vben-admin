@@ -43,7 +43,7 @@ export const columns: BasicColumn[] = [
         checkedChildren: '启用',
         unCheckedChildren: '禁用',
         loading: record.pendingStatus,
-        onChange(checked, e) {
+        onChange(checked, _) {
           record.pendingStatus = true;
           const newStatus = checked ? 1 : 0;
           const { createMessage } = useMessage();
@@ -53,7 +53,6 @@ export const columns: BasicColumn[] = [
               createMessage.success('状态修改成功');
             })
             .catch(() => {
-              console.log(e);
               createMessage.error('状态修改失败');
             })
             .finally(() => {

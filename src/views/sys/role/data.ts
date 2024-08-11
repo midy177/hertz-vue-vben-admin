@@ -41,7 +41,7 @@ export const columns: BasicColumn[] = [
         checkedChildren: '启用',
         unCheckedChildren: '禁用',
         loading: record.pendingStatus,
-        onChange(checked, e) {
+        onChange(checked, _) {
           record.pendingStatus = true;
           const newStatus = checked ? 1 : 0;
           const { createMessage } = useMessage();
@@ -52,7 +52,6 @@ export const columns: BasicColumn[] = [
             })
             .catch(async () => {
               await createMessage.error('更新失败');
-              console.error(e);
             })
             .finally(() => {
               record.pendingStatus = false;
