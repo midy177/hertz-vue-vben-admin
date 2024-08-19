@@ -18,30 +18,30 @@ const validateList = (rule: RuleObject, value: string[]) => {
 };
 
 export const HubSchemas: FormSchema[] = [
-  {
-    field: 'meta.domain',
-    component: 'Input',
-    label: '绑定域名',
-    colProps: {
-      span: 8,
-    },
-    componentProps: {
-      placeholder: '请输入绑定域名',
-    },
-    required: true,
-  },
-  {
-    field: 'pubAddr',
-    component: 'Input',
-    label: '公有IP',
-    colProps: {
-      span: 8,
-    },
-    componentProps: {
-      placeholder: '请输入公有IP',
-    },
-    required: true,
-  },
+  // {
+  //   field: 'meta.domain',
+  //   component: 'Input',
+  //   label: '绑定域名',
+  //   colProps: {
+  //     span: 8,
+  //   },
+  //   componentProps: {
+  //     placeholder: '请输入绑定域名',
+  //   },
+  //   required: true,
+  // },
+  // {
+  //   field: 'pubAddr',
+  //   component: 'Input',
+  //   label: '公有IP',
+  //   colProps: {
+  //     span: 8,
+  //   },
+  //   componentProps: {
+  //     placeholder: '请输入公有IP',
+  //   },
+  //   required: true,
+  // },
   {
     field: 'priAddr',
     component: 'Input',
