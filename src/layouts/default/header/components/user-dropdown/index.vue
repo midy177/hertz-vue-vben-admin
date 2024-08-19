@@ -1,10 +1,18 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
-      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
+      <!--      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />-->
+      <Avatar
+        :class="`${prefixCls}__header`"
+        size="small"
+        :style="{ backgroundColor: '#6592e6', verticalAlign: 'middle', cursor: 'pointer' }"
+        :gap="4"
+        :src="getUserInfo.avatar ? getUserInfo.avatar : ''"
+      >
+        {{ getUserInfo.avatar ? getUserInfo.avatar : getUserInfo.nickname }}
+      </Avatar>
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          <!-- Helio: `realName` 修改为 `nickname` -->
           {{ getUserInfo.nickname }}
         </span>
       </span>
@@ -18,7 +26,6 @@
           icon="ion:document-text-outline"
           v-if="getShowDoc"
         />
-        <Divider v-if="getShowDoc" />
         <MenuItem
           v-if="getUseLockPage"
           key="lock"
@@ -36,7 +43,7 @@
   <LockAction @register="register" />
 </template>
 <script lang="ts" setup>
-  import { Dropdown, Menu, Divider } from 'ant-design-vue';
+  import { Dropdown, Menu, Avatar } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
   import { computed } from 'vue';
   import { DOC_URL } from '@/settings/siteSetting';
@@ -45,7 +52,7 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useModal } from '@/components/Modal';
-  import headerImg from '@/assets/images/header.jpg';
+  // import headerImg from '@/assets/images/header.jpg';
   import { propTypes } from '@/utils/propTypes';
   import { openWindow } from '@/utils';
   import { createAsyncComponent } from '@/utils/factory/createAsyncComponent';
@@ -54,8 +61,7 @@
 
   const MenuItem = createAsyncComponent(() => import('./DropMenuItem.vue'));
   const LockAction = createAsyncComponent(() => import('../lock/LockModal.vue'));
-  const ChangeApi = createAsyncComponent(() => import('../ChangeApi/index.vue'));
-
+  createAsyncComponent(() => import('../ChangeApi/index.vue'));
   defineOptions({ name: 'UserDropdown' });
 
   defineProps({
@@ -64,13 +70,13 @@
 
   const { prefixCls } = useDesign('header-user-dropdown');
   const { t } = useI18n();
-  const { getShowDoc, getUseLockPage, getShowApi } = useHeaderSetting();
+  const { getShowDoc, getUseLockPage } = useHeaderSetting();
   const userStore = useUserStore();
 
   const getUserInfo = computed(() => {
     // Helio: `realName` 修改为 `nickname`
-    const { nickname = '', avatar } = userStore.getUserInfo || {};
-    return { nickname, avatar: avatar || headerImg };
+    const { nickname, avatar } = userStore.getUserInfo || {};
+    return { nickname, avatar: avatar || '' };
   });
 
   const [register, { openModal }] = useModal();

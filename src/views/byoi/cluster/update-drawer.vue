@@ -14,9 +14,9 @@
   import { ref, computed, unref } from 'vue';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
-  import { insertOrUpdateFormSchema } from '@/views/sys/api/data';
-  import {createApiApi, updateApiApi} from "@/api/sys/SysApiApi";
-  import {ApiInfo} from "@/api/sys/model/SysApiModel";
+  import { createByoiClusterListApi, updateByoiClusterListApi } from '@/api/byoi/ByoiClusterApi';
+  import { ByoiClusterInfo } from '@/api/byoi/model/clusterModel';
+  import {insertOrUpdateFormSchema} from './data';
 
   const isUpdateView = ref(true);
   let recordId: string;
@@ -29,7 +29,6 @@
     wrapperCol: {
       span: 24 - 4,
     },
-    // Helio: 相较于 Vben 2.3.0 版本，需要添加下面这行来修正样式
     baseColProps: { span: 24 },
     schemas: insertOrUpdateFormSchema,
     showActionButtonGroup: false,
@@ -41,12 +40,13 @@
     isUpdateView.value = !!data?.isUpdateView;
 
     if (unref(isUpdateView)) {
-    await setFieldsValue({
+      await setFieldsValue({
         ...data.record,
       });
-      // 主键ID
-      recordId = data.record?.ID || null;
     }
+
+    // 主键ID
+    recordId = data.record?.id || null;
   });
 
   const emit = defineEmits(['success', 'register']);
@@ -59,10 +59,9 @@
       setDrawerProps({ confirmLoading: true });
 
       if (recordId) {
-        values.ID = recordId;
-        await updateApiApi(<ApiInfo>values);
+        await updateByoiClusterListApi(<ByoiClusterInfo>values)
       } else {
-        await createApiApi(<ApiInfo>values);
+        await createByoiClusterListApi(<ByoiClusterInfo>values);
       }
 
       closeDrawer();

@@ -12,6 +12,15 @@ enum Api {
   GetMenuParamsByMenuId = '/api/admin/menu/param/list',
 }
 
+export const getUserMenuListApi = () => {
+  return defHttp.get<MenuListModel>(
+    { url: Api.GetMenuListByRole },
+    {
+      errorMessageMode: 'modal',
+    },
+  );
+};
+
 /**
  * 取所有菜单
  */

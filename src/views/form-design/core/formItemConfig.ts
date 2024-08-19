@@ -326,26 +326,26 @@ export const baseComponents: IVFormComponent[] = [
       ],
     },
   },
-  // {
-  //   component: 'Button',
-  //   label: '按钮',
-  //   icon: 'dashicons:button',
-  //   field: '',
-  //   colProps: { span: 24 },
-  //   hiddenLabel: true,
-  //   componentProps: {},
-  // },
-  // {
-  //   component: 'ColorPicker',
-  //   label: '颜色选择器',
-  //   icon: 'carbon:color-palette',
-  //   field: '',
-  //   colProps: { span: 24 },
-  //   componentProps: {
-  //     defaultValue: '',
-  //     value: '',
-  //   },
-  // },
+  {
+    component: 'Button',
+    label: '按钮',
+    icon: 'dashicons:button',
+    field: '',
+    colProps: { span: 24 },
+    hiddenLabel: true,
+    componentProps: {},
+  },
+  {
+    component: 'ColorPicker',
+    label: '颜色选择器',
+    icon: 'carbon:color-palette',
+    field: '',
+    colProps: { span: 24 },
+    componentProps: {
+      defaultValue: '',
+      value: '',
+    },
+  },
 
   {
     component: 'slot',

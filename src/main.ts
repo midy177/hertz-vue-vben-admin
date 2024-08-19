@@ -20,7 +20,6 @@ import App from './App.vue';
 
 async function bootstrap() {
   const app = createApp(App);
-
   // Configure store
   // 配置 store
   setupStore(app);
@@ -57,7 +56,6 @@ async function bootstrap() {
 
   // https://next.router.vuejs.org/api/#isready
   // await router.isReady();
-
   app.mount('#app');
 }
 
