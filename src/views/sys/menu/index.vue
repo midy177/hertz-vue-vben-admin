@@ -117,7 +117,7 @@
    * 单击删除按钮事件
    */
   async function handleDelete(record: Recordable) {
-    await deleteMenuApi([record.ID]);
+    await deleteMenuApi(record.ID);
     await reload();
   }
 
