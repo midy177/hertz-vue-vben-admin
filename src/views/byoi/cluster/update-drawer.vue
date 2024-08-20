@@ -4,45 +4,29 @@
     @register="registerDrawer"
     showFooter
     :title="getTitle"
-    width="40%"
+    width="70%"
     @ok="handleSubmit"
   >
-    <BasicForm @register="registerForm" />
+    <ByoiForm :show-header="false" :show-footer="false" />
   </BasicDrawer>
 </template>
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicForm, useForm } from '@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
-  import { createByoiClusterListApi, updateByoiClusterListApi } from '@/api/byoi/ByoiClusterApi';
-  import { ByoiClusterInfo } from '@/api/byoi/model/clusterModel';
-  import {insertOrUpdateFormSchema} from './data';
+  import ByoiForm from '@/views/byoi/form/index.vue';
 
   const isUpdateView = ref(true);
   let recordId: string;
-  const getTitle = computed(() => (!unref(isUpdateView) ? '新增' : '编辑'));
-
-  const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-    labelCol: {
-      span: 4,
-    },
-    wrapperCol: {
-      span: 24 - 4,
-    },
-    baseColProps: { span: 24 },
-    schemas: insertOrUpdateFormSchema,
-    showActionButtonGroup: false,
-  });
+  const getTitle = computed(() => (!unref(isUpdateView) ? '新增BYOI集群' : '编辑BYOI集群'));
 
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    await resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdateView.value = !!data?.isUpdateView;
 
     if (unref(isUpdateView)) {
-      await setFieldsValue({
-        ...data.record,
-      });
+      // await setFieldsValue({
+      //   ...data.record,
+      // });
     }
 
     // 主键ID
@@ -54,14 +38,14 @@
   async function handleSubmit() {
     try {
       // values 的字段定义见 ./data.ts 的 insertOrUpdateFormSchema
-      const values = await validate();
+      // const values = await validate();
 
       setDrawerProps({ confirmLoading: true });
 
       if (recordId) {
-        await updateByoiClusterListApi(<ByoiClusterInfo>values)
+        // await updateByoiClusterListApi(<ByoiClusterInfo>values)
       } else {
-        await createByoiClusterListApi(<ByoiClusterInfo>values);
+        // await createByoiClusterListApi(<ByoiClusterInfo>values);
       }
 
       closeDrawer();

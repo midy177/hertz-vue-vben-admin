@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="BYOI安装申请表单">
+  <PageWrapper :title="getShowHeader">
     <Space direction="vertical" class="w-full h-full">
       <Base />
       <CM />
@@ -7,9 +7,9 @@
       <PROXY />
       <HUB />
     </Space>
-    <template #rightFooter>
+    <template #rightFooter v-if="props.showFooter">
       <Space>
-        <a-button type="primary" danger>取消</a-button>
+        <a-button type="primary" danger @click="props.cancel">取消</a-button>
         <a-button type="primary">提交</a-button>
       </Space>
     </template>
@@ -23,5 +23,24 @@
   import SBC from '@/views/byoi/form/sbc/sbc.vue';
   import PROXY from '@/views/byoi/form/proxy/proxy.vue';
   import HUB from '@/views/byoi/form/hub/hub.vue';
+  import {computed} from "vue";
+  const props = defineProps({
+    cancel: {
+      type: Function,
+      default: () => {},
+    },
+    showFooter: {
+      type: Boolean,
+      default: true,
+    },
+    showHeader: {
+      type: Boolean,
+      default: true,
+    }
+  })
+
+  const getShowHeader = computed(
+    () => props.showFooter ? 'BYOI安装申请表单' : undefined,
+  );
 </script>
 <style scoped></style>

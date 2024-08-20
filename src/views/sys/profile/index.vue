@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <Card title="个人信息" style="width: 100%">
+    <Card title="个人信息" class="w-full">
       <Form
         :model="formData"
         name="basic"
@@ -37,7 +37,7 @@
         </FormItem>
       </Form>
     </Card>
-    <Card title="修改密码" style="width: 100%">
+    <Card title="修改密码" class="w-full">
       <Form
         :model="changePasswordReq"
         name="basic"
